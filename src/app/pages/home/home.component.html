@@ -1,0 +1,96 @@
+<!-- OPCIONES INICIALES -->
+<div *ngIf="!userChecked && !showMenu">
+  <button (click)="showRegisteredForm = true">Usuario registrado</button>
+  <button (click)="showCreateForm = true">No registrado</button>
+</div>
+
+<!-- FORMULARIO BUSCAR ESTUDIANTE -->
+<div *ngIf="showRegisteredForm && !userChecked">
+  <input type="number" [(ngModel)]="studentId" placeholder="Ingrese ID del estudiante" />
+  <button (click)="checkStudent()">Buscar</button>
+</div>
+
+<!-- MENSAJE USUARIO NO ENCONTRADO -->
+<div *ngIf="studentNotFound">
+  <p>El usuario no existe</p>
+  <button (click)="showCreateForm = true; studentNotFound = false;">Crear usuario</button>
+</div>
+
+<!-- FORMULARIO CREAR ESTUDIANTE -->
+<div *ngIf="showCreateForm && !showMenu">
+  <input type="text" [(ngModel)]="studentName" placeholder="Nombre del estudiante" />
+  <button (click)="createStudent()">Crear</button>
+</div>
+
+<!-- MENÚ PRINCIPAL – SOLO SI EL USUARIO EXISTE -->
+<div *ngIf="userChecked && showMenu">
+
+  <!-- SOLO SI NO TIENE LAS 3 MATERIAS -->
+  <button *ngIf="!hasAllSubjects" (click)="loadAvailableSubjects()">
+    Inscribir materias
+  </button>
+
+  <!-- SOLO SI YA TIENE LAS 3 MATERIAS -->
+  <button *ngIf="hasAllSubjects" (click)="loadOtherStudents()">
+    Ver otros estudiantes
+  </button>
+
+  <button *ngIf="hasAllSubjects" (click)="loadClassmatesMenu()">
+    Ver estudiantes por materia
+  </button>
+</div>
+
+<!-- FORMULARIO DE INSCRIPCIÓN -->
+<div *ngIf="showEnrollForm">
+
+  <h3>Selecciona materias</h3>
+
+  <div *ngFor="let subject of availableSubjects">
+    <label>
+      <input type="checkbox"
+             [checked]="subject.selected"
+             (change)="toggleSelectionFromEvent(subject, $any($event.target).checked)"
+             [disabled]="isDisabled(subject)" />
+
+      {{ subject.subjectName }} - Profesor: {{ subject.professorName }}
+    </label>
+  </div>
+
+  <div class="actions">
+    <button (click)="enrollSubjects()">Inscribir seleccionadas</button>
+    <button (click)="showEnrollForm = false">Cancelar</button>
+  </div>
+</div>
+
+<!-- LISTA DE OTROS ESTUDIANTES -->
+<div *ngIf="showOtherStudents">
+  <h3>Otros estudiantes que inscribieron materias</h3>
+  <ul>
+    <li *ngFor="let s of otherStudents">{{ s.name }}</li>
+  </ul>
+</div>
+
+<!-- MENU DE MATERIAS PARA VER COMPAÑEROS -->
+<div *ngIf="showSubjectsForClassmates">
+  <h3>Selecciona una materia</h3>
+
+  <select #sel (change)="loadClassmates(sel.value)">
+    <option value="">-- Selecciona --</option>
+    <option *ngFor="let m of studentEnrolledSubjects" [value]="m.subjectId">
+      {{ m.name }}
+    </option>
+  </select>
+</div>
+
+<!-- LISTA DE COMPAÑEROS POR MATERIA -->
+<div *ngIf="showClassmates">
+  <h3>Compañeros inscritos en esta materia:</h3>
+
+  <ul *ngIf="classmatesBySubject.length > 0">
+    <li *ngFor="let c of classmatesBySubject">{{ c.name }}</li>
+  </ul>
+
+  <p *ngIf="classmatesBySubject.length === 0">
+    No hay compañeros aún.
+  </p>
+</div>
