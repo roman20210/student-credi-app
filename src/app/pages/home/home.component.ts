@@ -22,18 +22,27 @@ export class HomeComponent {
   showRegisteredForm = false;
   availableSubjects: AvailableSubject[] = [];
   selectedSubjects: AvailableSubject[] = [];
+  otherStudents: any[] = [];
+  classmatesBySubject: any[] = [];
+  showOtherStudents = false;
+  showClassmates = false;
+  showSubjectsForClassmates = false;
+  studentEnrolledSubjects: { subjectId: number; name: string }[] = [];
+  hasAllSubjects = false;
+  userChecked = false;
+
 
   constructor(private studentService: StudentService) { }
 
   checkStudent() {
     this.studentService.getStudentById(this.studentId).subscribe({
       next: (student) => {
-
+        this.userChecked = true;
         this.studentNotFound = false;
         this.showMenu = true;
 
         const yaInscritas = student.studentSubjects?.length ?? 0;
-
+        this.hasAllSubjects = yaInscritas >= 3;
         if (yaInscritas >= 3) {
           alert("Ya tienes las 3 materias inscritas. No puedes inscribir más.");
 
@@ -47,6 +56,7 @@ export class HomeComponent {
       },
 
       error: () => {
+         this.userChecked = true; 
         this.studentNotFound = true;
         this.showMenu = false;
         this.showEnrollForm = false;
@@ -138,5 +148,47 @@ export class HomeComponent {
       }
     });
   }
+  loadOtherStudents() {
+    this.studentService.getOtherStudents(this.studentId).subscribe({
+      next: (res) => {
+        this.otherStudents = res;
+        this.showOtherStudents = true;
+        this.showClassmates = false;
+        this.showSubjectsForClassmates = false;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+  loadClassmatesMenu() {
+    this.studentService.getStudentById(this.studentId).subscribe({
+      next: (student) => {
+        // Proteger contra undefined
+        const materias = student.studentSubjects ?? [];
+
+        this.studentEnrolledSubjects = materias.map((ss: any) => ({
+          subjectId: ss.subjectId,
+          name: ss.subject?.name || "Materia con Id " + ss.subjectId
+        }));
+
+        this.showSubjectsForClassmates = true;
+        this.showOtherStudents = false;
+        this.showClassmates = false;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+  loadClassmates(subjectId: any) {
+    const id = Number(subjectId);
+    if (!id) return;
+
+    this.studentService.getClassmatesBySubject(id, this.studentId).subscribe({
+      next: (res) => {
+        this.classmatesBySubject = res;
+        this.showClassmates = true;
+      },
+      error: (err) => console.error(err)
+    });
+  }
+
 
 }

@@ -1,45 +1,57 @@
-<!-- Opciones iniciales -->
-<div *ngIf="!showMenu && !studentNotFound">
+<!-- OPCIONES INICIALES -->
+<div *ngIf="!userChecked && !showMenu">
   <button (click)="showRegisteredForm = true">Usuario registrado</button>
   <button (click)="showCreateForm = true">No registrado</button>
 </div>
 
-<!-- Formulario para buscar estudiante registrado -->
-<div *ngIf="showRegisteredForm">
+<!-- FORMULARIO BUSCAR ESTUDIANTE -->
+<div *ngIf="showRegisteredForm && !userChecked">
   <input type="number" [(ngModel)]="studentId" placeholder="Ingrese ID del estudiante" />
   <button (click)="checkStudent()">Buscar</button>
 </div>
 
-<!-- Mensaje de usuario no encontrado -->
+<!-- MENSAJE USUARIO NO ENCONTRADO -->
 <div *ngIf="studentNotFound">
   <p>El usuario no existe</p>
-  <button (click)="showCreateForm = true">Crear usuario</button>
+  <button (click)="showCreateForm = true; studentNotFound = false;">Crear usuario</button>
 </div>
 
-<!-- Formulario para crear estudiante -->
-<div *ngIf="showCreateForm">
+<!-- FORMULARIO CREAR ESTUDIANTE -->
+<div *ngIf="showCreateForm && !showMenu">
   <input type="text" [(ngModel)]="studentName" placeholder="Nombre del estudiante" />
   <button (click)="createStudent()">Crear</button>
 </div>
 
-<!-- Menú de estudiante encontrado -->
-<div *ngIf="showMenu">
-  <button (click)="loadAvailableSubjects()" [disabled]="!canEnroll">
+<!-- MENÚ PRINCIPAL – SOLO SI EL USUARIO EXISTE -->
+<div *ngIf="userChecked && showMenu">
+
+  <!-- SOLO SI NO TIENE LAS 3 MATERIAS -->
+  <button *ngIf="!hasAllSubjects" (click)="loadAvailableSubjects()">
     Inscribir materias
   </button>
 
-  <button>Ver registros de compañeros</button>
+  <!-- SOLO SI YA TIENE LAS 3 MATERIAS -->
+  <button *ngIf="hasAllSubjects" (click)="loadOtherStudents()">
+    Ver otros estudiantes
+  </button>
+
+  <button *ngIf="hasAllSubjects" (click)="loadClassmatesMenu()">
+    Ver estudiantes por materia
+  </button>
 </div>
-<!-- Formulario de inscripción de materias -->
+
+<!-- FORMULARIO DE INSCRIPCIÓN -->
 <div *ngIf="showEnrollForm">
-  <div *ngFor="let subject of availableSubjects; let i = index" class="subject-row">
+
+  <h3>Selecciona materias</h3>
+
+  <div *ngFor="let subject of availableSubjects">
     <label>
-      <input
-        type="checkbox"
-        [checked]="subject.selected"
-        (change)="toggleSelectionFromEvent(subject, $any($event.target).checked)"
-        [disabled]="isDisabled(subject)"
-      />
+      <input type="checkbox"
+             [checked]="subject.selected"
+             (change)="toggleSelectionFromEvent(subject, $any($event.target).checked)"
+             [disabled]="isDisabled(subject)" />
+
       {{ subject.subjectName }} - Profesor: {{ subject.professorName }}
     </label>
   </div>
@@ -48,4 +60,37 @@
     <button (click)="enrollSubjects()">Inscribir seleccionadas</button>
     <button (click)="showEnrollForm = false">Cancelar</button>
   </div>
+</div>
+
+<!-- LISTA DE OTROS ESTUDIANTES -->
+<div *ngIf="showOtherStudents">
+  <h3>Otros estudiantes que inscribieron materias</h3>
+  <ul>
+    <li *ngFor="let s of otherStudents">{{ s.name }}</li>
+  </ul>
+</div>
+
+<!-- MENU DE MATERIAS PARA VER COMPAÑEROS -->
+<div *ngIf="showSubjectsForClassmates">
+  <h3>Selecciona una materia</h3>
+
+  <select #sel (change)="loadClassmates(sel.value)">
+    <option value="">-- Selecciona --</option>
+    <option *ngFor="let m of studentEnrolledSubjects" [value]="m.subjectId">
+      {{ m.name }}
+    </option>
+  </select>
+</div>
+
+<!-- LISTA DE COMPAÑEROS POR MATERIA -->
+<div *ngIf="showClassmates">
+  <h3>Compañeros inscritos en esta materia:</h3>
+
+  <ul *ngIf="classmatesBySubject.length > 0">
+    <li *ngFor="let c of classmatesBySubject">{{ c.name }}</li>
+  </ul>
+
+  <p *ngIf="classmatesBySubject.length === 0">
+    No hay compañeros aún.
+  </p>
 </div>

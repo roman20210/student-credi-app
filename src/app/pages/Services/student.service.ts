@@ -5,29 +5,37 @@ import { Student } from '../models/student.model';
 import { AvailableSubject } from '../models/avaliable-subject.model';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class StudentService {
-  getAvailableSubjects(studentId: number) {
-  return this.http.get<AvailableSubject[]>(`https://localhost:7255/api/StudentSubjects/available/${studentId}`);
-}
+    getAvailableSubjects(studentId: number) {
+        return this.http.get<AvailableSubject[]>(`https://localhost:7255/api/StudentSubjects/available/${studentId}`);
+    }
 
-enrollSubjects(studentId: number, subjectIds: number[]) {
-  return this.http.post(`https://localhost:7255/api/StudentSubjects/enroll`, {
-    studentId,
-    subjectIds
-  });
-}
+    enrollSubjects(studentId: number, subjectIds: number[]) {
+        return this.http.post(`https://localhost:7255/api/StudentSubjects/enroll`, {
+            studentId,
+            subjectIds
+        });
+    }
 
-  private apiUrl = 'https://localhost:7255/api/Student'; 
+    private apiUrl = 'https://localhost:7255/api/Student';
 
-  constructor(private http: HttpClient) {}
+    constructor(private http: HttpClient) { }
 
-  getStudentById(id: number): Observable<Student> {
-    return this.http.get<Student>(`${this.apiUrl}/${id}`);
-  }
+    getStudentById(id: number): Observable<Student> {
+        return this.http.get<Student>(`${this.apiUrl}/${id}`);
+    }
 
-  createStudent(student: Student): Observable<Student> {
-    return this.http.post<Student>(this.apiUrl, student);
-  }
+    createStudent(student: Student): Observable<Student> {
+        return this.http.post<Student>(this.apiUrl, student);
+    }
+    getOtherStudents(studentId: number) {
+        return this.http.get<any[]>(`${this.apiUrl}/${studentId}/others`);
+    }
+
+    getClassmatesBySubject(subjectId: number, studentId: number) {
+        return this.http.get<any[]>(`https://localhost:7255/api/StudentSubjects/${subjectId}/classmates/${studentId}`);
+    }
+
 }
