@@ -1,0 +1,57 @@
+/* Botones principales */
+button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Mensajes de error o usuario no encontrado */
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* Menú de opciones */
+.menu {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  button {
+    width: 200px;
+  }
+}
+
+/* Formulario de inscripción de materias */
+.enroll-form {
+  margin-top: 20px;
+
+  .subject-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+
+  .submit-btn {
+    margin-top: 15px;
+  }
+}
+

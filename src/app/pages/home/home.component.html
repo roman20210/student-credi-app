@@ -1,0 +1,53 @@
+<!-- Opciones iniciales -->
+<div *ngIf="!showMenu && !studentNotFound">
+  <button (click)="showRegisteredForm = true">Usuario registrado</button>
+  <button (click)="showCreateForm = true">No registrado</button>
+</div>
+
+<!-- Formulario para buscar estudiante registrado -->
+<div *ngIf="showRegisteredForm">
+  <input type="number" [(ngModel)]="studentId" placeholder="Ingrese ID del estudiante" />
+  <button (click)="checkStudent()">Buscar</button>
+</div>
+
+<!-- Mensaje de usuario no encontrado -->
+<div *ngIf="studentNotFound">
+  <p>El usuario no existe</p>
+  <button (click)="showCreateForm = true">Crear usuario</button>
+</div>
+
+<!-- Formulario para crear estudiante -->
+<div *ngIf="showCreateForm">
+  <input type="text" [(ngModel)]="studentName" placeholder="Nombre del estudiante" />
+  <button (click)="createStudent()">Crear</button>
+</div>
+
+<!-- Menú de estudiante encontrado -->
+<div *ngIf="showMenu">
+  <button (click)="loadAvailableSubjects()">Inscribir materias</button>
+  <button>Ver registros de compañeros</button>
+</div>
+
+<!-- Formulario de inscripción de materias -->
+<div *ngIf="showEnrollForm">
+  <div *ngFor="let subject of availableSubjects; let i = index" class="subject-row">
+    <label>
+      <input
+        type="checkbox"
+        [checked]="subject.selected"
+        (change)="toggleSelectionFromEvent(subject, $any($event.target).checked)"
+        [disabled]="isDisabled(subject)"
+      />
+      {{ subject.subjectName }} - Profesor: {{ subject.professorName }}
+    </label>
+  </div>
+
+  <div class="actions">
+    <button (click)="enrollSubjects()">Inscribir seleccionadas</button>
+    <button (click)="showEnrollForm = false">Cancelar</button>
+  </div>
+</div>
+
+
+
+
