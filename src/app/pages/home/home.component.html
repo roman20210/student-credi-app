@@ -24,10 +24,12 @@
 
 <!-- Menú de estudiante encontrado -->
 <div *ngIf="showMenu">
-  <button (click)="loadAvailableSubjects()">Inscribir materias</button>
+  <button (click)="loadAvailableSubjects()" [disabled]="!canEnroll">
+    Inscribir materias
+  </button>
+
   <button>Ver registros de compañeros</button>
 </div>
-
 <!-- Formulario de inscripción de materias -->
 <div *ngIf="showEnrollForm">
   <div *ngFor="let subject of availableSubjects; let i = index" class="subject-row">
@@ -47,7 +49,3 @@
     <button (click)="showEnrollForm = false">Cancelar</button>
   </div>
 </div>
-
-
-
-

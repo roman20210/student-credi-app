@@ -1,4 +1,7 @@
+import { StudentSubject } from "./student.subject,model";
+
 export interface Student {
   id?: number;
-  name: string;
+  name?: string;
+  studentSubjects?: StudentSubject[];
 }

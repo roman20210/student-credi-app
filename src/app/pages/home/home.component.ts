@@ -15,7 +15,7 @@ export class HomeComponent {
   studentId!: number;
   studentName!: string;
   studentNotFound = false;
-
+  canEnroll = true;
   showMenu = false;
   showEnrollForm = false;
   showCreateForm = false;
@@ -28,9 +28,24 @@ export class HomeComponent {
   checkStudent() {
     this.studentService.getStudentById(this.studentId).subscribe({
       next: (student) => {
+
         this.studentNotFound = false;
         this.showMenu = true;
+
+        const yaInscritas = student.studentSubjects?.length ?? 0;
+
+        if (yaInscritas >= 3) {
+          alert("Ya tienes las 3 materias inscritas. No puedes inscribir más.");
+
+          this.canEnroll = false;
+          this.showEnrollForm = false;
+
+          return;
+        }
+
+        this.canEnroll = true;
       },
+
       error: () => {
         this.studentNotFound = true;
         this.showMenu = false;
@@ -62,6 +77,8 @@ export class HomeComponent {
   }
 
   loadAvailableSubjects() {
+    if (!this.canEnroll) return;
+
     this.studentService.getAvailableSubjects(this.studentId).subscribe({
       next: (subjects) => {
         this.availableSubjects = subjects;
@@ -71,7 +88,6 @@ export class HomeComponent {
       error: (err) => console.error(err)
     });
   }
-
   toggleSelectionFromEvent(subject: AvailableSubject, checked: boolean) {
     if (!checked) {
       subject.selected = false;
@@ -112,14 +128,15 @@ export class HomeComponent {
     const subjectIds = this.selectedSubjects.map(s => s.subjectId);
 
     this.studentService.enrollSubjects(this.studentId, subjectIds).subscribe({
-      next: () => {
-        alert('Materias inscritas correctamente');
+      next: (res) => {
+        alert(res);
         this.showEnrollForm = false;
       },
       error: (err) => {
-        alert(err.error || 'Error al inscribir materias');
         console.error(err);
+        alert(err.error?.message || JSON.stringify(err.error) || 'Error al inscribir materias');
       }
     });
   }
+
 }
