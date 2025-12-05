@@ -1,57 +1,88 @@
-/* Botones principales */
+/* Contenedor general */
+div {
+  margin: 1rem 0;
+}
+
+/* Botones generales */
 button {
-  background-color: #007bff;
+  background-color: #4f46e5; /* azul moderno */
   color: white;
   border: none;
-  padding: 10px 16px;
-  margin: 5px;
-  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  margin: 0.5rem 0.25rem;
+  border-radius: 0.5rem;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  font-weight: 500;
+  transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #3730a3;
+  transform: translateY(-2px);
 }
 
-/* Mensajes de error o usuario no encontrado */
-.error-message {
-  color: red;
-  font-weight: bold;
-  margin-top: 10px;
+/* Inputs y select */
+input[type="text"],
+input[type="number"],
+select {
+  padding: 0.5rem;
+  border: 1px solid #d1d5db; /* gris suave */
+  border-radius: 0.5rem;
+  width: 100%;
+  max-width: 300px;
+  margin: 0.5rem 0;
+  box-sizing: border-box;
+  transition: border 0.2s ease;
 }
 
-/* Menú de opciones */
-.menu {
-  margin-top: 20px;
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #4f46e5;
+  box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+}
+
+/* Formularios de selección de materias */
+h3 {
+  color: #111827; /* gris oscuro */
+  margin-bottom: 0.5rem;
+}
+
+.subject-row {
   display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  button {
-    width: 200px;
-  }
+  align-items: center;
+  background-color: #f3f4f6; /* gris claro */
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-bottom: 0.25rem;
 }
 
-/* Formulario de inscripción de materias */
-.enroll-form {
-  margin-top: 20px;
-
-  .subject-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-
-    label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-  }
-
-  .submit-btn {
-    margin-top: 15px;
-  }
+.subject-row label {
+  cursor: pointer;
 }
 
+/* Acciones */
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  gap: 0.5rem;
+}
+
+/* Listas de estudiantes */
+ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+li {
+  padding: 0.25rem 0.5rem;
+  background-color: #e5e7eb; /* gris intermedio */
+  margin-bottom: 0.25rem;
+  border-radius: 0.5rem;
+}
+
+/* Mensajes */
+p {
+  color: #ef4444; /* rojo suave para alertas */
+  font-weight: 500;
+}
