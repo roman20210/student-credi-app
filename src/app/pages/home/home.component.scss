@@ -1,88 +1,115 @@
-/* Contenedor general */
-div {
-  margin: 1rem 0;
+/* Fondo general */
+:host {
+  display: block;
+  min-height: 100vh;
+  background-color: #f9fafb;
+  font-family: 'Segoe UI', Roboto, sans-serif;
 }
 
-/* Botones generales */
+/* Contenedor central */
+.app-container {
+  max-width: 420px;
+  margin: 3rem auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+}
+
+/* Separación entre bloques */
+div {
+  margin-bottom: 1rem;
+}
+
+/* Botones */
 button {
-  background-color: #4f46e5; /* azul moderno */
+  background-color: #e11d2e;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
-  margin: 0.5rem 0.25rem;
-  border-radius: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  margin: 0.4rem;
+  border-radius: 0.6rem;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.2s ease;
 }
 
 button:hover {
-  background-color: #3730a3;
-  transform: translateY(-2px);
+  background-color: #b91c1c;
+  transform: translateY(-1px);
 }
 
-/* Inputs y select */
+/* Botón salir */
+button.logout {
+  background-color: #6b7280;
+}
+
+button.logout:hover {
+  background-color: #374151;
+}
+
+/* Inputs y selects */
 input[type="text"],
 input[type="number"],
 select {
-  padding: 0.5rem;
-  border: 1px solid #d1d5db; /* gris suave */
-  border-radius: 0.5rem;
   width: 100%;
-  max-width: 300px;
-  margin: 0.5rem 0;
-  box-sizing: border-box;
-  transition: border 0.2s ease;
+  padding: 0.6rem;
+  border-radius: 0.6rem;
+  border: 1px solid #d1d5db;
+  margin-top: 0.5rem;
+  font-size: 0.95rem;
 }
 
 input:focus,
 select:focus {
   outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 5px rgba(79, 70, 229, 0.5);
+  border-color: #e11d2e;
+  box-shadow: 0 0 0 2px rgba(225, 29, 46, 0.2);
 }
 
-/* Formularios de selección de materias */
+/* Títulos */
 h3 {
-  color: #111827; /* gris oscuro */
-  margin-bottom: 0.5rem;
+  color: #111827;
+  margin-bottom: 1rem;
 }
 
-.subject-row {
+/* Materias */
+label {
   display: flex;
   align-items: center;
-  background-color: #f3f4f6; /* gris claro */
+  gap: 0.5rem;
+  background-color: #f3f4f6;
   padding: 0.5rem;
   border-radius: 0.5rem;
-  margin-bottom: 0.25rem;
-}
-
-.subject-row label {
+  margin-bottom: 0.4rem;
   cursor: pointer;
+  text-align: left;
 }
 
 /* Acciones */
 .actions {
-  margin-top: 1rem;
   display: flex;
+  justify-content: center;
   gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-/* Listas de estudiantes */
+/* Listas */
 ul {
-  list-style-type: none;
-  padding-left: 0;
+  list-style: none;
+  padding: 0;
 }
 
 li {
-  padding: 0.25rem 0.5rem;
-  background-color: #e5e7eb; /* gris intermedio */
-  margin-bottom: 0.25rem;
-  border-radius: 0.5rem;
+  background-color: #e5e7eb;
+  padding: 0.4rem;
+  border-radius: 0.4rem;
+  margin-bottom: 0.3rem;
 }
 
 /* Mensajes */
 p {
-  color: #ef4444; /* rojo suave para alertas */
-  font-weight: 500;
+  color: #e11d2e;
+  font-weight: 600;
 }

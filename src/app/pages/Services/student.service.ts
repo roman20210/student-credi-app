@@ -13,11 +13,13 @@ export class StudentService {
     }
 
     enrollSubjects(studentId: number, subjectIds: number[]) {
-        return this.http.post(`https://localhost:7255/api/StudentSubjects/enroll`, {
-            studentId,
-            subjectIds
-        });
+        return this.http.post(
+            `https://localhost:7255/api/StudentSubjects/enroll`,
+            { studentId, subjectIds },
+            { responseType: 'text' }
+        );
     }
+
 
     private apiUrl = 'https://localhost:7255/api/Student';
 

@@ -56,7 +56,7 @@ export class HomeComponent {
       },
 
       error: () => {
-         this.userChecked = true; 
+        this.userChecked = true;
         this.studentNotFound = true;
         this.showMenu = false;
         this.showEnrollForm = false;
@@ -74,10 +74,20 @@ export class HomeComponent {
     this.studentService.createStudent({ name: this.studentName }).subscribe({
       next: (student) => {
         alert('Estudiante creado correctamente con ID ' + student.id);
-        this.studentName = '';
-        this.showCreateForm = false;
-        this.showMenu = true;
+
         this.studentId = student.id!;
+        this.studentName = '';
+
+        this.userChecked = true;
+        this.studentNotFound = false;
+        this.hasAllSubjects = false;
+        this.canEnroll = true;
+
+        this.showCreateForm = false;
+        this.showRegisteredForm = false;
+        this.showMenu = true;
+
+        this.loadAvailableSubjects();
       },
       error: (err) => {
         console.error(err);
@@ -85,7 +95,6 @@ export class HomeComponent {
       }
     });
   }
-
   loadAvailableSubjects() {
     if (!this.canEnroll) return;
 
@@ -140,14 +149,26 @@ export class HomeComponent {
     this.studentService.enrollSubjects(this.studentId, subjectIds).subscribe({
       next: (res) => {
         alert(res);
+
         this.showEnrollForm = false;
+
+        // ya tiene materias
+        this.hasAllSubjects = true;
+        this.canEnroll = false;
+
+        // volver al menú
+        this.showMenu = true;
+        this.showOtherStudents = false;
+        this.showSubjectsForClassmates = false;
+        this.showClassmates = false;
       },
       error: (err) => {
         console.error(err);
-        alert(err.error?.message || JSON.stringify(err.error) || 'Error al inscribir materias');
+        alert('Error al inscribir materias');
       }
     });
   }
+
   loadOtherStudents() {
     this.studentService.getOtherStudents(this.studentId).subscribe({
       next: (res) => {
@@ -188,6 +209,29 @@ export class HomeComponent {
       },
       error: (err) => console.error(err)
     });
+  }
+  resetState() {
+    this.studentId = undefined as any;
+    this.studentName = '';
+
+    this.userChecked = false;
+    this.studentNotFound = false;
+    this.canEnroll = true;
+    this.hasAllSubjects = false;
+
+    this.showMenu = false;
+    this.showEnrollForm = false;
+    this.showCreateForm = false;
+    this.showRegisteredForm = false;
+    this.showOtherStudents = false;
+    this.showSubjectsForClassmates = false;
+    this.showClassmates = false;
+
+    this.availableSubjects = [];
+    this.selectedSubjects = [];
+    this.otherStudents = [];
+    this.classmatesBySubject = [];
+    this.studentEnrolledSubjects = [];
   }
 
 
